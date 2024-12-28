@@ -12,6 +12,8 @@ This document contains the details of ideas and implementation for time tracker 
 
 ## Non Requirement
 - User registration
+- User Login
+- User authentication
 
 ## Non-Functional Requirements
 1. **Scalability**

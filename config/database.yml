@@ -1,0 +1,26 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: postgres
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: time_tracker
+
+staging:
+  <<: *default
+  database: time_tracker_staging
+  username: time_tracker_staging
+  password: <%= ENV['TIME_TRACKER_DB_PASSWORD'] %>
+  host: <%= ENV['TIME_TRACKER_DB_HOST'] %>
+
+production:
+  <<: *default
+  database: time_tracker_production
+  username: time_tracker_production
+  password: <%= ENV['TIME_TRACKER_DB_PASSWORD'] %>
+  host: <%= ENV['TIME_TRACKER_DB_HOST'] %>

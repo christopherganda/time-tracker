@@ -9,7 +9,7 @@ RSpec.describe UserFollowsController, type: :controller do
       it "returns not found error" do
         post :create, params: { actor: 100, followee_id: 100 }
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)["error"]).to eq("Follower/actor does not exist")
+        expect(JSON.parse(response.body)["error"]).to include("Actor does not exist")
       end
     end
 

@@ -10,7 +10,7 @@ class UserFollow < ApplicationRecord
 
   def following_self
     if follower_id == followee_id
-      errors.add("follower_id cannot be the same as followee_id")
+      errors.add(:follower, :blank, message: "cannot be the same as Followee")
     end
   end
 end

@@ -21,6 +21,7 @@ This document contains the details of ideas and implementation for time tracker 
 1. We have not implemented authentication yet, so we are not able to properly check if the user is valid, so for any endpoints implemented, we only define the user as "actor". But for basic needs, we can use like basic auth, store the username and password in database with password being encrypted.
 2. We have not implemented get list of users, but this is needed so an actor/follower can properly follow/unfollow a user. But we will check if followee_id does exists in user's table
 3. For any clock-ins, every second clock-in will be considered a clock out for the last clock-in for us to calculate sleep record.
+4. Since the feature is quite simple, most part is enough with simple error message, but it is better to implement proper logging.
 
 ## Non-Functional Requirements
 1. **Scalability**

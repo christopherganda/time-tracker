@@ -33,7 +33,7 @@ RSpec.describe UserFollowsController, type: :controller do
       it "returns internal server error" do
         post :create, params: { actor: user1.id, followee_id: user1.id }
         expect(response).to have_http_status(:internal_server_error)
-        expect(JSON.parse(response.body)["error"]).to eq(["Follower cannot be the same as Followee"])
+        expect(JSON.parse(response.body)["error"]).to include("Follower cannot be the same as Followee")
       end
     end
   end

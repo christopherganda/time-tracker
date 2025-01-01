@@ -11,11 +11,11 @@ class User < ApplicationRecord
 
   # Get a user's followings' information
   def followings
-    User.where(id: followee_ids)
+    User.where(id: following_ids).pluck(:name)
   end
 
   # Get a user's followers' information
   def followers
-    User.where(id: follower_ids)
+    User.where(id: follower_ids).pluck(:name)
   end
 end

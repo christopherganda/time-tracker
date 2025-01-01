@@ -35,4 +35,30 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context 'relationship with clock ins' do
+    let!(:user1) { User.create!(name: "test1") }
+    before do
+      ClockIn.create!(
+        user_id: user1.id,
+        clocked_in_at: Time.now
+      )
+    end
+
+    it "has 1 clock in record" do
+      clock_in = ClockIn.where(user_id: user1.id)
+                .order(clocked_in_at: :desc)
+                .limit(7)
+                .pluck(:clocked_in_at, :is_clocked_out)
+      expect(user1.clock_ins).to eq(clock_in)
+
+      clock_in_json = clock_in.map do |clocked_in_at, is_clocked_out|
+        {
+          clocked_in_at: clocked_in_at.strftime("%Y-%m-%d %H:%M:%S"),
+          is_clocked_out: is_clocked_out
+        }
+      end
+      expect(user1.clock_ins_json).to eq(clock_in_json)
+    end
+  end
+
 end

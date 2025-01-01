@@ -1,6 +1,6 @@
 class SleepRecord < ApplicationRecord
   belongs_to :user, optional: true
-  belongs_to :clock_in
+  belongs_to :clock_in, optional: true
 
   before_create :update_clock_in_to_used
 

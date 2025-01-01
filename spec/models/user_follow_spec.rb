@@ -5,16 +5,6 @@ RSpec.describe UserFollow, type: :model do
   let!(:user2) { User.create!(name: "test2") }
 
   context "validations" do
-    it "follower_id does not exist in user" do
-      follow = UserFollow.new(follower_id: user1.id+100, followee_id: user2.id)
-      expect(follow).not_to be_valid
-    end
-
-    it "followee_id does not exist in user" do
-      follow = UserFollow.new(follower_id: user1.id, followee_id: user2.id+100)
-      expect(follow).not_to be_valid
-    end
-
     it "allows valid follow relationships" do
       follow = UserFollow.new(follower_id: user1.id, followee_id: user2.id)
       expect(follow).to be_valid

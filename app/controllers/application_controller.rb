@@ -16,4 +16,5 @@ class ApplicationController < ActionController::API
       data: data,
       message: message,
     }, status: :ok
+  end
 end

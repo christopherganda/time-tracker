@@ -2,7 +2,7 @@ class SleepRecord < ApplicationRecord
   belongs_to :user
   belongs_to :clock_in
 
-  before_create: 
+  before_create :update_clock_in_to_used
 
   private
 

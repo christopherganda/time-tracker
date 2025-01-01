@@ -11,18 +11,18 @@ class ClockInsController < ApplicationController
       SleepRecord.create!(
         user_id: user_id,
         clock_in_id: last_unused_clock_in.id,
-        clock_in_at: last_unused_clock_in.clocked_in_at,
-        clock_out_at: current_time
+        clocked_in_at: last_unused_clock_in.clocked_in_at,
+        clocked_out_at: current_time
       )
       render_success("test", I18n.t('success.messages.clock_out_success'))
     else
       ClockIn.create!(
-        user_id: user.id,
+        user_id: user_id,
         clocked_in_at: Time.now
       )
       render_success("test", I18n.t('success.messages.clock_in_success'))
     end
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::ActiveRecordError => e
     render_error(:unprocessable_entity, e.message)
   end
 end

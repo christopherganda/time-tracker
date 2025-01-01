@@ -18,4 +18,20 @@ class User < ApplicationRecord
   def followers
     User.where(id: follower_ids).pluck(:name)
   end
+
+  def clock_ins
+    ClockIn.where(user_id: id)
+    .order(clocked_in_at: :desc)
+    .limit(7)
+    .pluck(:clocked_in_at, :is_clocked_out)
+  end
+
+  def clock_ins_json
+    clock_ins.map do |clocked_in_at, is_clocked_out|
+      {
+        clocked_in_at: clocked_in_at.strftime("%Y-%m-%d %H:%M:%S"),
+        is_clocked_out: is_clocked_out
+      }
+    end
+  end
 end

@@ -10,4 +10,11 @@ class ApplicationController < ActionController::API
       message: message,
     }, status: :ok
   end
+
+  def render_success(data, message)
+    render json: {
+      data: data,
+      message: message,
+    }, status: :ok
+  end
 end

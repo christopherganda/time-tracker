@@ -34,4 +34,17 @@ class User < ApplicationRecord
       }
     end
   end
+
+  def followings_sleep_records
+    SleepRecord
+    .where(user_id: following_ids)
+    .where(clocked_in_at: 7.days.ago..Time.current)
+    .select(
+      'user_id AS followee_id, 
+      (clocked_out_at - clocked_in_at) AS sleep_length, 
+      clocked_in_at, 
+      clocked_out_at'
+    )
+    .order('sleep_length DESC')
+  end
 end

@@ -61,4 +61,9 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context '#followings_sleep_records' do
+    it 'gets sleep records of followings' do
+    end
+  end
+
 end

@@ -1,14 +1,17 @@
 en:
   activerecord:
     errors:
-      following_self: "cannot be the same as Followee"
-      has_been_followed: "This user has been followed"
+      following_self: 'cannot be the same as Followee'
+      following_self_with_param: '%{param} cannot be the same as Followee'
+      has_been_followed: 'This user has been followed'
   success:
     messages:
-      follow_success: "Succesfully followed user %{followee_id}"
-      clock_in_success: "Successfully clock in"
-      clock_out_success: "Successfully clock out"
-      success: "Success"
+      unfollow_success: 'Successfully unfollowed user %{followee_id}'
+      follow_success: 'Succesfully followed user %{followee_id}'
+      clock_in_success: 'Successfully clock in'
+      clock_out_success: 'Successfully clock out'
+      success: 'Success'
   errors:
     messages:
-      record_not_found: "%{record} does not exist"
+      record_not_found: '%{record} does not exist'
+      relationship_not_exist: 'Following relationship does not exist'

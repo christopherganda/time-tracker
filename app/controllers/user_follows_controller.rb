@@ -1,17 +1,14 @@
 class UserFollowsController < ApplicationController
-  def create
-    actor = params[:actor]
-    followee_id = params[:followee_id]
+  include UserFinder
 
-    unless User.exists?(actor)
-      render_error(:not_found, I18n.t('errors.messages.record_not_found', record: 'Actor')) and return
-    end
+  def create
+    followee_id = params[:followee_id]
 
     unless User.exists?(followee_id)
       render_error(:not_found, I18n.t('errors.messages.record_not_found', record: 'Followee')) and return
     end
 
-    follow = UserFollow.new(follower_id: actor, followee_id: followee_id)
+    follow = UserFollow.new(follower_id: @user.id, followee_id: followee_id)
     if follow.save
       render_success_no_data(I18n.t('success.messages.follow_success', followee_id: followee_id))
     else
@@ -26,9 +23,14 @@ class UserFollowsController < ApplicationController
     follow = UserFollow.find_by(follower_id: actor, followee_id: followee_id)
     if follow
       follow.destroy
-      render json: { message: "Successfully unfollowed user #{followee_id}" }, status: :ok
+      render_success_no_data(I18n.t('success.messages.unfollow_success', followee_id: followee_id))
     else
-      render json: { error: "Following relationship does not exist" }, status: :not_found
+      render_error(:not_found, I18n.t('errors.messages.relationship_not_exist'))
     end
+  end
+
+  private
+  def requires_user_finder?
+    action_name.in?(%w[create])
   end
 end

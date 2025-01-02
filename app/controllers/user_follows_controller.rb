@@ -24,13 +24,17 @@ class UserFollowsController < ApplicationController
     actor = params[:actor]
     followee_id = params[:followee_id]
 
-    follow = UserFollow.find_by(follower_id: actor, followee_id: followee_id)
-    if follow
-      follow.destroy
-      render_success_no_data(I18n.t('success.messages.unfollow_success', followee_id: followee_id))
-    else
-      render_error(:not_found, I18n.t('errors.messages.relationship_not_exist'))
+    UserFollow.transaction do
+      follow = UserFollow.lock.find_by(follower_id: actor, followee_id: followee_id)
+      if follow
+        follow.destroy!
+        render_success_no_data(I18n.t('success.messages.unfollow_success', followee_id: followee_id))
+      else
+        render_error(:not_found, I18n.t('errors.messages.relationship_not_exist'))
+      end
     end
+  rescue => e
+    render_error(:unprocessable_entity, e.message)
   end
 
   private

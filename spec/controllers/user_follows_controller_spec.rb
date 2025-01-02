@@ -69,8 +69,21 @@ RSpec.describe UserFollowsController, type: :controller do
     context 'record does not exist' do
       it 'return relationship does not exist' do
         delete :destroy, params: { actor: user1.id, followee_id: user2.id }
+
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)['error']).to eq('Following relationship does not exist')
+      end
+    end
+
+    context 'when error is raised' do
+      before do
+        UserFollow.create(follower_id: user1.id, followee_id: user2.id)
+        allow_any_instance_of(UserFollow).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed.new("error"))
+      end
+      it 'return error' do
+        delete :destroy, params: { actor: user1.id, followee_id: user2.id }
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_30_132353) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_01_155048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_30_132353) do
     t.datetime "clocked_in_at", null: false
     t.datetime "clocked_out_at", null: false
     t.index ["clock_in_id"], name: "index_sleep_records_on_clock_in_id"
+    t.index ["user_id", "clocked_in_at"], name: "index_sleep_records_on_user_id_and_clocked_in_at"
     t.index ["user_id"], name: "index_sleep_records_on_user_id"
   end
 

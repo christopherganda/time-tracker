@@ -13,4 +13,5 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9'
   gem 'annotate', '~> 3.2'
   gem 'rack-mini-profiler', '~> 3.0'
+  gem 'faker'
 end

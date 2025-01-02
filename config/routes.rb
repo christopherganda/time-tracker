@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   delete '/follow', to: 'user_follows#destroy'
 
   post '/clock-in', to: 'clock_ins#upsert'
+
+  get '/sleeps', to: 'sleep_records#get'
 end

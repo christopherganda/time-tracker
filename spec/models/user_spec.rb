@@ -61,4 +61,73 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context '#followings_sleep_records' do
+    let!(:user) { create(:user) }
+    let!(:followed_user) { create(:user) }
+    let!(:non_followed_user) { create(:user) }
+    now = Time.now
+
+    let!(:follow_relationship) do
+      create(:user_follow, follower: user, followee: followed_user)
+    end
+
+    let!(:recent_sleep_record) do
+      create(
+        :sleep_record,
+        user: followed_user,
+        clocked_in_at: now - 3.days,
+        clocked_out_at: now - 2.days
+      )
+    end
+
+    let!(:old_sleep_record) do
+      create(
+        :sleep_record,
+        user: followed_user,
+        clocked_in_at: now - 10.days,
+        clocked_out_at: now - 9.days
+      )
+    end
+
+    let!(:invalid_sleep_record) do
+      create(
+        :sleep_record,
+        user: non_followed_user,
+        clocked_in_at: now - 3.days,
+        clocked_out_at: now - 2.days
+      )
+    end
+
+    it 'returns followings sleep records of the past week' do
+      result = user.followings_sleep_records
+
+      expect(result.size).to eq(1)
+      expect(result.first.followee_id).to eq(followed_user.id)
+      expect(result.first.sleep_length).to eq(1.day)
+      expect(result.first.clocked_in_at).to eq(recent_sleep_record.clocked_in_at)
+      expect(result.first.clocked_out_at).to eq(recent_sleep_record.clocked_out_at)
+    end
+
+    it 'will not return sleep records beyond 7 days and non following user' do
+      result = user.followings_sleep_records
+
+      expect(result).not_to include(old_sleep_record)
+      expect(result).not_to include(invalid_sleep_record)
+    end
+
+    it 'orders the results by sleep length descending' do
+      create(
+        :sleep_record,
+        user: followed_user,
+        clocked_in_at: now - 4.days,
+        clocked_out_at: now - 2.days
+      )
+
+      result = user.followings_sleep_records
+      sleep_lengths = result.map(&:sleep_length)
+
+      expect(sleep_lengths).to eq(sleep_lengths.sort.reverse)
+    end
+  end
+
 end

@@ -8,6 +8,7 @@ en:
       follow_success: "Succesfully followed user %{followee_id}"
       clock_in_success: "Successfully clock in"
       clock_out_success: "Successfully clock out"
+      success: "Success"
   errors:
     messages:
       record_not_found: "%{record} does not exist"

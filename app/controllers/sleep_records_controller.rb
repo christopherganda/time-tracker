@@ -11,7 +11,7 @@ class SleepRecordsController < ApplicationController
               clocked_out_at: format_readable_timestamp(record.clocked_out_at)
             }
           end
-    render_success(resp, "")
+    render_success(resp, I18n.t('success.messages.success'))
   end
 
   private

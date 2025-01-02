@@ -11,6 +11,10 @@ development:
   <<: *default
   database: time_tracker
 
+test:
+  <<: *default
+  database: time_tracker_test
+
 staging:
   <<: *default
   database: time_tracker_staging

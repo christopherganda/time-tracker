@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_01_155048) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_02_060751) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,7 +28,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_01_155048) do
     t.datetime "clocked_in_at", null: false
     t.datetime "clocked_out_at", null: false
     t.index ["clock_in_id"], name: "index_sleep_records_on_clock_in_id"
-    t.index ["user_id", "clocked_in_at"], name: "index_sleep_records_on_user_id_and_clocked_in_at"
     t.index ["user_id"], name: "index_sleep_records_on_user_id"
   end
 
@@ -38,6 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_01_155048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["followee_id"], name: "index_user_follows_on_followee_id"
+    t.index ["follower_id", "followee_id"], name: "index_user_follows_on_follower_id_and_followee_id", unique: true
     t.index ["follower_id"], name: "index_user_follows_on_follower_id"
   end
 

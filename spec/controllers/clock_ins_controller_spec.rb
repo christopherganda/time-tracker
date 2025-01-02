@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe ClockInsController, type: :controller do
   describe 'post #upsert' do
-    let!(:user1) { User.create(name: "test1") }
+    let!(:user1) { User.create(name: 'test1') }
     context 'when user does not exist' do
       it 'trigger error' do
-        post :upsert, params: { actor: user1.id+1 }
+        post :upsert, params: { actor: nil }
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)["error"]).to include("Actor does not exist")
+        expect(JSON.parse(response.body)['error']).to include('Actor does not exist')
       end
     end
 
@@ -39,12 +39,12 @@ RSpec.describe ClockInsController, type: :controller do
 
     context 'when an ActiveRecord error occurs' do
       it 'handles the error properly' do
-        allow(ClockIn).to receive(:create).and_raise(ActiveRecord::ActiveRecordError.new("db error"))
+        allow(ClockIn).to receive(:create).and_raise(ActiveRecord::ActiveRecordError.new('db error'))
 
         post :upsert, params: { actor: user1.id }
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include("db error")
+        expect(response.body).to include('db error')
       end
     end
   end

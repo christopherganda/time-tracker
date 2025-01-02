@@ -34,6 +34,8 @@ This document contains the details of ideas and implementation for time tracker 
 3. **Performance**
       - p95 100ms
 
-## Quantitative Analysis
-
+## Business Process
+![flow](./system_design.png)
 ## Schemas
+Notes: Sorry that the ERD is a bit mess up, not sure why I can't drag the line to make straight line on draw.io.
+![erd](./time_tracker_erd.png)

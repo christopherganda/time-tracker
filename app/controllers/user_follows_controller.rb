@@ -8,11 +8,15 @@ class UserFollowsController < ApplicationController
       render_error(:not_found, I18n.t('errors.messages.record_not_found', record: 'Followee')) and return
     end
 
-    follow = UserFollow.new(follower_id: @user.id, followee_id: followee_id)
-    if follow.save
+    begin
+      follow = UserFollow.create!(follower_id: @user.id, followee_id: followee_id)
       render_success_no_data(I18n.t('success.messages.follow_success', followee_id: followee_id))
-    else
-      render_error(:internal_server_error, follow.errors.full_messages)
+    rescue ActiveRecord::RecordNotUnique
+      render_error(:conflict, I18n.t('activerecord.errors.has_been_followed'))
+    rescue ActiveRecord::RecordInvalid => e
+      # need to find a way to return proper error message
+      # because rails error append the key
+      render_error(:unprocessable_entity, e.record.errors.full_messages)
     end
   end
 
@@ -20,13 +24,17 @@ class UserFollowsController < ApplicationController
     actor = params[:actor]
     followee_id = params[:followee_id]
 
-    follow = UserFollow.find_by(follower_id: actor, followee_id: followee_id)
-    if follow
-      follow.destroy
-      render_success_no_data(I18n.t('success.messages.unfollow_success', followee_id: followee_id))
-    else
-      render_error(:not_found, I18n.t('errors.messages.relationship_not_exist'))
+    UserFollow.transaction do
+      follow = UserFollow.lock.find_by(follower_id: actor, followee_id: followee_id)
+      if follow
+        follow.destroy!
+        render_success_no_data(I18n.t('success.messages.unfollow_success', followee_id: followee_id))
+      else
+        render_error(:not_found, I18n.t('errors.messages.relationship_not_exist'))
+      end
     end
+  rescue => e
+    render_error(:unprocessable_entity, e.message)
   end
 
   private

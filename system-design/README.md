@@ -22,6 +22,7 @@ This document contains the details of ideas and implementation for time tracker 
 2. We have not implemented get list of users, but this is needed so an actor/follower can properly follow/unfollow a user. But we will check if followee_id does exists in user's table
 3. For any clock-ins, every second clock-in will be considered a clock out for the last clock-in for us to calculate sleep record.
 4. Since the feature is quite simple, most part is enough with simple error message, but it is better to implement proper logging.
+5. Need proper error handling because ActiveModel::Error's full_messages return message with key.
 
 ## Non-Functional Requirements
 1. **Scalability**

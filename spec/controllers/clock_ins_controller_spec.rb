@@ -23,23 +23,25 @@ RSpec.describe ClockInsController, type: :controller do
 
     context 'when last_unused_clock_in exist' do
       before do
-        ClockIn.create(
-          user_id: user1.id,
-          clocked_in_at: Time.now
-        )
+        @clock_in = ClockIn.create!(user_id: user1.id, clocked_in_at: Time.now, is_clocked_out: false)
       end
       it 'creates new sleep record and update previous clock in to true' do
+
         expect {
           post :upsert, params: { actor: user1.id }
         }.to change(SleepRecord, :count).by(1)
+
         expect(response).to have_http_status(:ok)
         expect(response.body).to include(I18n.t('success.messages.clock_out_success'))
+        
+        @clock_in.reload
+        expect(@clock_in.is_clocked_out).to eq(true)
       end
     end
 
     context 'when an ActiveRecord error occurs' do
       it 'handles the error properly' do
-        allow(ClockIn).to receive(:create).and_raise(ActiveRecord::ActiveRecordError.new('db error'))
+        allow(ClockIn).to receive(:create!).and_raise(ActiveRecord::ActiveRecordError.new('db error'))
 
         post :upsert, params: { actor: user1.id }
 

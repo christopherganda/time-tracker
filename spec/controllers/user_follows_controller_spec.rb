@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe UserFollowsController, type: :controller do
-  let!(:user1) { User.create!(name: 'test1') }
-  let!(:user2) { User.create!(name: 'test2') }
+  let!(:user1) { create(:user) }
+  let!(:user2) { create(:user) }
 
   describe 'POST #create' do
     context 'when actor_id does not exist' do
       it 'returns not found error' do
-        post :create, params: { actor: 100, followee_id: 100 }
+        post :create, params: { actor: nil, followee_id: nil }
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)['error']).to include('Actor does not exist')
       end
@@ -15,7 +15,7 @@ RSpec.describe UserFollowsController, type: :controller do
 
     context 'when the followee does not exist' do
       it 'returns not found error' do
-        post :create, params: { actor: user1.id, followee_id: 100 }
+        post :create, params: { actor: user1.id, followee_id: nil }
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)['error']).to eq('Followee does not exist')
       end
@@ -23,7 +23,9 @@ RSpec.describe UserFollowsController, type: :controller do
 
     context 'success' do
       it 'creates record to UserFollow' do
-        post :create, params: { actor: user1.id, followee_id: user2.id }
+        expect {
+          post :create, params: { actor: user1.id, followee_id: user2.id }
+        }.to change(UserFollow, :count).by(1)
         expect(response).to have_http_status(:ok)
         expect(UserFollow.exists?(follower_id: user1.id, followee_id: user2.id)).to be_truthy
       end
@@ -45,7 +47,9 @@ RSpec.describe UserFollowsController, type: :controller do
       end
 
       it 'delete record from UserFollow' do
-        delete :destroy, params: { actor: user1.id, followee_id: user2.id }
+        expect {
+          delete :destroy, params: { actor: user1.id, followee_id: user2.id }
+        }.to change(UserFollow, :count).by(-1)
         expect(response).to have_http_status(:ok)
         expect(UserFollow.exists?(follower_id: user1.id, followee_id: user2.id)).to be_falsey
       end

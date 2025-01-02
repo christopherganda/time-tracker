@@ -2,6 +2,7 @@ en:
   activerecord:
     errors:
       following_self: 'cannot be the same as Followee'
+      following_self_with_param: '%{param} cannot be the same as Followee'
       has_been_followed: 'This user has been followed'
   success:
     messages:

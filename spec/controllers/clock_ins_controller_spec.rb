@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ClockInsController, type: :controller do
   describe 'post #upsert' do
-    let!(:user1) { User.create(name: 'test1') }
+    let!(:user1) { create(:user) }
     context 'when user does not exist' do
       it 'trigger error' do
         post :upsert, params: { actor: nil }

@@ -23,6 +23,7 @@ This document contains the details of ideas and implementation for time tracker 
 3. For any clock-ins, every second clock-in will be considered a clock out for the last clock-in for us to calculate sleep record.
 4. Since the feature is quite simple, most part is enough with simple error message, but it is better to implement proper logging.
 5. Need proper error handling because ActiveModel::Error's full_messages return message with key.
+6. Need to implement retry mechanism for concurrent requests to mitigate deadlocks on locking.
 
 ## Non-Functional Requirements
 1. **Scalability**

@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_03_014113) do
     t.bigint "user_id", null: false
     t.datetime "clocked_in_at", null: false
     t.boolean "is_clocked_out", default: false, null: false
-    t.index ["is_clocked_out", "user_id"], name: "index_clock_ins_on_is_clocked_out_and_user_id"
+    t.index ["user_id", "is_clocked_out"], name: "index_clock_ins_on_user_id_and_is_clocked_out"
     t.index ["user_id"], name: "index_clock_ins_on_user_id"
   end
 

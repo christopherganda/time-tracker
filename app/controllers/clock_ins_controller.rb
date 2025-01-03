@@ -7,8 +7,8 @@ class ClockInsController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         last_unused_clock_in = ClockIn.where(
-          user_id: @user.id, 
-          is_clocked_out: false)
+          is_clocked_out: false,
+          user_id: @user.id)
           .order(clocked_in_at: :desc)
           .limit(1)
           .lock(true)
